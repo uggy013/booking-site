@@ -62,6 +62,10 @@ const fourSeasonsIstanbulPhoto =
   'https://media.alotea.com/four-seasons-hotel-istanbul-at-sultanahmet-istanbul-cover.webp';
 const parkHyattSydneyPhoto =
   'https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/10/17/1439/Park-Hyatt-Sydney-P079-Hotel-Exterior-with-Opera-House.jpg/Park-Hyatt-Sydney-P079-Hotel-Exterior-with-Opera-House.16x9.jpg';
+const ojiBoutiqueMainPhoto = 'https://pixcdn.co/photos/700x500/15500/1550033/1550033554.webp';
+const ojiBoutiquePoolPhoto = 'https://pixcdn.co/photos/1920x1080/14678/1467896/1467896345.webp';
+const ojiBoutiqueRestaurantPhoto = 'https://pixcdn.co/photos/1920x1080/14678/1467889/1467889538.webp';
+const ojiBoutiqueRoomPhoto = 'https://pixcdn.co/photos/1920x1080/14679/1467921/1467921836.webp';
 
 export const hotels: Hotel[] = [
   {
@@ -383,5 +387,26 @@ export const hotels: Hotel[] = [
     },
     photos: { yard: parkHyattSydneyPhoto, cafe, room },
     image: parkHyattSydneyPhoto,
+  },
+  {
+    id: 'oji-boutique-hotel',
+    name: 'Oji Boutique Hotel',
+    location: 'Alanya, Turkey',
+    address: '3 Altin Sokak, Alanya, Turkey',
+    price: 'from EUR 41 / night',
+    rating: '9.1',
+    description:
+      'Boutique hotel near Alanya Public Beach with an outdoor pool, restaurant, bar, garden, and 15 air-conditioned rooms.',
+    details: {
+      yard: 'Outdoor swimming pool and garden area near the beach',
+      cafe: 'On-site restaurant and pool bar',
+      rooms: 'Air-conditioned rooms with flat-screen TV, fridge, kettle, and some balconies',
+    },
+    photos: {
+      yard: ojiBoutiquePoolPhoto,
+      cafe: ojiBoutiqueRestaurantPhoto,
+      room: ojiBoutiqueRoomPhoto,
+    },
+    image: ojiBoutiqueMainPhoto,
   },
 ];

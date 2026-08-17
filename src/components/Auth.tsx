@@ -96,6 +96,23 @@ export function Auth() {
       <p className="eyebrow">easybook</p>
       <h1>{mode === 'signin' ? 'Вход' : 'Регистрация'}</h1>
 
+      <div className="auth-tabs" aria-label="Выбор действия">
+        <button
+          type="button"
+          className={mode === 'signin' ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'}
+          onClick={() => setMode('signin')}
+        >
+          Войти
+        </button>
+        <button
+          type="button"
+          className={mode === 'signup' ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'}
+          onClick={() => setMode('signup')}
+        >
+          Зарегистрироваться
+        </button>
+      </div>
+
       <button
         type="button"
         className="google-button"

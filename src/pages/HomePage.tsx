@@ -1,15 +1,19 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
+import { CartLink } from '../components/CartLink';
 import { FlightCard } from '../components/FlightCard';
 import { HotelSection } from '../components/HotelSection';
 import { TrainCard } from '../components/TrainCard';
 import { flights } from '../data/flights';
 import { Hotel, hotels } from '../data/hotels';
 import { trains } from '../data/trains';
+import { Amenity, amenities, sortHotels, SortMode } from '../lib/hotelExtras';
+import { loadRealHotel } from '../lib/realHotelSearch';
 
 type RegionFilter = 'all' | 'kazakhstan' | 'world';
 type RatingFilter = 'all' | '4.5' | '4.8' | '4.9';
 type PriceFilter = 'all' | '55000' | '120000' | '400000';
+type FavoriteFilter = 'all' | 'favorites';
 
 const economyFlights = flights.filter((flight) => flight.flightClass === 'economy');
 const comfortFlights = flights.filter((flight) => flight.flightClass === 'comfort');
@@ -37,12 +41,27 @@ export function HomePage() {
   const [region, setRegion] = useState<RegionFilter>('all');
   const [rating, setRating] = useState<RatingFilter>('all');
   const [price, setPrice] = useState<PriceFilter>('all');
+  const [amenity, setAmenity] = useState<Amenity | 'all'>('all');
+  const [sort, setSort] = useState<SortMode>('recommended');
+  const [favoriteFilter, setFavoriteFilter] = useState<FavoriteFilter>('all');
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+    const savedFavorites = window.localStorage.getItem('favoriteHotels');
+    return savedFavorites ? (JSON.parse(savedFavorites) as string[]) : [];
+  });
+  const [realHotel, setRealHotel] = useState<Hotel | null>(null);
+  const [isRealHotelLoading, setIsRealHotelLoading] = useState(false);
   const normalizedQuery = query.trim().toLowerCase();
 
   const hasFilters =
-    normalizedQuery || region !== 'all' || rating !== 'all' || price !== 'all';
+    normalizedQuery ||
+    region !== 'all' ||
+    rating !== 'all' ||
+    price !== 'all' ||
+    amenity !== 'all' ||
+    sort !== 'recommended' ||
+    favoriteFilter !== 'all';
 
-  const foundHotels = useMemo(() => {
+  const matchedHotels = useMemo(() => {
     return hotels.filter((hotel) => {
       const text = [hotel.name, hotel.location, hotel.address, hotel.description]
         .join(' ')
@@ -53,20 +72,89 @@ export function HomePage() {
         (region === 'kazakhstan' ? isKazakhstanHotel(hotel) : !isKazakhstanHotel(hotel));
       const matchesRating = rating === 'all' || Number(hotel.rating) >= Number(rating);
       const matchesPrice = price === 'all' || getPrice(hotel.price) <= Number(price);
+      const matchesAmenity =
+        amenity === 'all' ||
+        [hotel.name, hotel.description, ...Object.values(hotel.details)]
+          .join(' ')
+          .toLowerCase()
+          .includes(amenity);
+      const matchesFavorite = favoriteFilter === 'all' || favoriteIds.includes(hotel.id);
 
-      return matchesQuery && matchesRegion && matchesRating && matchesPrice;
+      return matchesQuery && matchesRegion && matchesRating && matchesPrice && matchesAmenity && matchesFavorite;
     });
-  }, [normalizedQuery, price, rating, region]);
+
+  }, [amenity, favoriteFilter, favoriteIds, normalizedQuery, price, rating, region]);
+
+  const foundHotels = sortHotels(realHotel && !isRealHotelLoading ? [realHotel] : matchedHotels, sort);
+
+  useEffect(() => {
+    window.localStorage.setItem('favoriteHotels', JSON.stringify(favoriteIds));
+  }, [favoriteIds]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    if (!normalizedQuery) {
+      setRealHotel(null);
+      setIsRealHotelLoading(false);
+      return () => {
+        isActive = false;
+      };
+    }
+
+    setIsRealHotelLoading(true);
+    loadRealHotel(query)
+      .then((hotel) => {
+        if (isActive) {
+          setRealHotel(hotel);
+        }
+      })
+      .catch(() => {
+        if (isActive) {
+          setRealHotel(null);
+        }
+      })
+      .finally(() => {
+        if (isActive) {
+          setIsRealHotelLoading(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [normalizedQuery, query]);
 
   function resetFilters() {
     setQuery('');
     setRegion('all');
     setRating('all');
     setPrice('all');
+    setAmenity('all');
+    setSort('recommended');
+    setFavoriteFilter('all');
+  }
+
+  function toggleFavorite(hotelId: string) {
+    setFavoriteIds((current) =>
+      current.includes(hotelId) ? current.filter((id) => id !== hotelId) : [...current, hotelId],
+    );
   }
 
   return (
     <main>
+      <header className="home-header">
+        <nav className="home-header__actions" aria-label="Аккаунт">
+          <CartLink />
+          <Link className="button button--light" href="/login">
+            Войти
+          </Link>
+          <Link className="button" href="/login">
+            Зарегистрироваться
+          </Link>
+        </nav>
+      </header>
+
       <section className="hero">
         <div className="hero__content">
           <p className="eyebrow">easybook</p>
@@ -77,9 +165,6 @@ export function HomePage() {
           </p>
           <Link className="button" href="/booking">
             Забронировать отель
-          </Link>
-          <Link className="button button--light hero__login" href="/login">
-            Войти через Google
           </Link>
           <Link className="button button--light hero__login" href="/cars">
             Аренда авто
@@ -129,6 +214,36 @@ export function HomePage() {
               <option value="400000">400 000 ₸</option>
             </select>
           </label>
+          <label className="filter-field">
+            <span>Удобства</span>
+            <select value={amenity} onChange={(event) => setAmenity(event.target.value as Amenity | 'all')}>
+              <option value="all">Любые</option>
+              {amenities.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.title}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="filter-field">
+            <span>Сортировка</span>
+            <select value={sort} onChange={(event) => setSort(event.target.value as SortMode)}>
+              <option value="recommended">Лучшие</option>
+              <option value="rating">Рейтинг</option>
+              <option value="price-low">Дешевле</option>
+              <option value="price-high">Дороже</option>
+            </select>
+          </label>
+          <label className="filter-field">
+            <span>Сохранённые</span>
+            <select
+              value={favoriteFilter}
+              onChange={(event) => setFavoriteFilter(event.target.value as FavoriteFilter)}
+            >
+              <option value="all">Все</option>
+              <option value="favorites">Только сохранённые</option>
+            </select>
+          </label>
           <button type="button" onClick={resetFilters} disabled={!hasFilters}>
             Сбросить
           </button>
@@ -140,6 +255,8 @@ export function HomePage() {
           eyebrow="Фильтр"
           title={foundHotels.length > 0 ? `Найдено: ${foundHotels.length}` : 'Ничего не найдено'}
           hotels={foundHotels}
+          favoriteIds={favoriteIds}
+          onFavoriteToggle={toggleFavorite}
         />
       ) : (
         <>

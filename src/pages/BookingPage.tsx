@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { hotels } from '../data/hotels';
 
 type HotelBooking = {
@@ -22,8 +22,10 @@ const roomTypes = [
 ];
 
 export function BookingPage() {
+  const [location] = useLocation();
   const [bookings, setBookings] = useState<HotelBooking[]>([]);
   const [message, setMessage] = useState('');
+  const selectedHotel = new URLSearchParams(location.split('?')[1] ?? '').get('hotel') ?? hotels[0]?.name;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,7 +77,7 @@ export function BookingPage() {
 
           <label>
             Отель
-            <select name="hotel" required>
+            <select name="hotel" defaultValue={selectedHotel} required>
               {hotels.map((hotel) => (
                 <option key={hotel.id} value={hotel.name}>
                   {hotel.name} - {hotel.location}
