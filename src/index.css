@@ -349,9 +349,19 @@ button:hover {
 
 .hotel-card p,
 .empty,
-.message {
+.message,
+.loading-note {
   color: var(--muted);
   line-height: 1.5;
+}
+
+.loading-note {
+  font-weight: 800;
+}
+
+.search-status {
+  width: min(1120px, calc(100% - 40px));
+  margin: 22px auto 0;
 }
 
 .hotel-card__address {

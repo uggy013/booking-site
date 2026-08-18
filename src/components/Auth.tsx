@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
+import { getFriendlyAuthMessage } from '../lib/authMessages';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { AuthForm } from './AuthForm';
 import { SupabaseSetupMessage } from './SupabaseSetupMessage';
 
 export function Auth() {
@@ -9,14 +11,26 @@ export function Auth() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return undefined;
+    if (!isSupabaseConfigured) {
+      setIsSessionLoading(false);
+      return undefined;
+    }
 
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        setSession(data.session);
+      })
+      .catch(() => {
+        setMessage('Не удалось проверить вход. Обнови страницу или попробуй позже.');
+      })
+      .finally(() => {
+        setIsSessionLoading(false);
+      });
 
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
@@ -26,6 +40,16 @@ export function Auth() {
   }, []);
 
   if (!isSupabaseConfigured) return <SupabaseSetupMessage />;
+
+  if (isSessionLoading) {
+    return (
+      <section className="auth-card">
+        <p className="eyebrow">easybook</p>
+        <h1>Проверяем вход</h1>
+        <p className="loading-note">Секунду, смотрим твой аккаунт.</p>
+      </section>
+    );
+  }
 
   async function handleGoogleSignIn() {
     setBusy(true);
@@ -38,7 +62,7 @@ export function Auth() {
     });
 
     if (error) {
-      setMessage(error.message);
+      setMessage(getFriendlyAuthMessage(error.message));
       setBusy(false);
     }
   }
@@ -61,12 +85,12 @@ export function Auth() {
     setBusy(false);
 
     if (error) {
-      setMessage(error.message);
+      setMessage(getFriendlyAuthMessage(error.message));
       return;
     }
 
     if (mode === 'signup') {
-      setMessage('Готово! Проверь почту, если Supabase попросит подтверждение.');
+      setMessage('Готово! Проверь почту, если EasyBook попросит подтвердить регистрацию.');
     }
   }
 
@@ -85,7 +109,7 @@ export function Auth() {
         <h1>Ты вошёл</h1>
         <p className="auth-card__text">{userEmail}</p>
         <button type="button" onClick={handleSignOut} disabled={busy}>
-          Выйти
+          {busy ? 'Выходим...' : 'Выйти'}
         </button>
       </section>
     );
@@ -96,65 +120,19 @@ export function Auth() {
       <p className="eyebrow">easybook</p>
       <h1>{mode === 'signin' ? 'Вход' : 'Регистрация'}</h1>
 
-      <div className="auth-tabs" aria-label="Выбор действия">
-        <button
-          type="button"
-          className={mode === 'signin' ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'}
-          onClick={() => setMode('signin')}
-        >
-          Войти
-        </button>
-        <button
-          type="button"
-          className={mode === 'signup' ? 'auth-tabs__button auth-tabs__button--active' : 'auth-tabs__button'}
-          onClick={() => setMode('signup')}
-        >
-          Зарегистрироваться
-        </button>
-      </div>
-
-      <button
-        type="button"
-        className="google-button"
-        onClick={handleGoogleSignIn}
-        disabled={busy}
-      >
-        <span aria-hidden="true">G</span>
-        Войти через Google
-      </button>
-
-      <div className="auth-card__divider">или</div>
-
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          type="email"
-          placeholder="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="пароль (6+ символов)"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          minLength={6}
-          required
-        />
-        <button type="submit" disabled={busy}>
-          {busy ? 'Загрузка...' : mode === 'signin' ? 'Войти' : 'Создать аккаунт'}
-        </button>
-      </form>
+      <AuthForm
+        busy={busy}
+        email={email}
+        mode={mode}
+        password={password}
+        onEmailChange={setEmail}
+        onGoogleSignIn={handleGoogleSignIn}
+        onModeChange={setMode}
+        onPasswordChange={setPassword}
+        onSubmit={handleSubmit}
+      />
 
       {message && <p className="message">{message}</p>}
-
-      <button
-        type="button"
-        className="ghost"
-        onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-      >
-        {mode === 'signin' ? 'Нет аккаунта? Зарегистрируйся' : 'Уже есть аккаунт? Войти'}
-      </button>
     </section>
   );
 }

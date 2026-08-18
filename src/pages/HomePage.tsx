@@ -50,6 +50,7 @@ export function HomePage() {
   });
   const [realHotel, setRealHotel] = useState<Hotel | null>(null);
   const [isRealHotelLoading, setIsRealHotelLoading] = useState(false);
+  const [realHotelMessage, setRealHotelMessage] = useState('');
   const normalizedQuery = query.trim().toLowerCase();
 
   const hasFilters =
@@ -97,21 +98,25 @@ export function HomePage() {
     if (!normalizedQuery) {
       setRealHotel(null);
       setIsRealHotelLoading(false);
+      setRealHotelMessage('');
       return () => {
         isActive = false;
       };
     }
 
     setIsRealHotelLoading(true);
+    setRealHotelMessage('');
     loadRealHotel(query)
       .then((hotel) => {
         if (isActive) {
           setRealHotel(hotel);
+          setRealHotelMessage(hotel ? '' : 'Не нашли точные внешние данные. Показываем ближайшие варианты из EasyBook.');
         }
       })
       .catch(() => {
         if (isActive) {
           setRealHotel(null);
+          setRealHotelMessage('Внешний поиск сейчас не отвечает. Показываем варианты из EasyBook.');
         }
       })
       .finally(() => {
@@ -251,13 +256,17 @@ export function HomePage() {
       </section>
 
       {hasFilters ? (
-        <HotelSection
-          eyebrow="Фильтр"
-          title={foundHotels.length > 0 ? `Найдено: ${foundHotels.length}` : 'Ничего не найдено'}
-          hotels={foundHotels}
-          favoriteIds={favoriteIds}
-          onFavoriteToggle={toggleFavorite}
-        />
+        <>
+          {isRealHotelLoading && <p className="loading-note search-status">Ищем детали отеля и фотографии...</p>}
+          {realHotelMessage && <p className="message search-status">{realHotelMessage}</p>}
+          <HotelSection
+            eyebrow="Фильтр"
+            title={foundHotels.length > 0 ? `Найдено: ${foundHotels.length}` : 'Ничего не найдено'}
+            hotels={foundHotels}
+            favoriteIds={favoriteIds}
+            onFavoriteToggle={toggleFavorite}
+          />
+        </>
       ) : (
         <>
           <HotelSection eyebrow="Отели" title="Популярные отели" hotels={popularHotels} />
