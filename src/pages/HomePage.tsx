@@ -44,7 +44,7 @@ export function HomePage() {
   const [amenity, setAmenity] = useState<Amenity | 'all'>('all');
   const [sort, setSort] = useState<SortMode>('recommended');
   const [favoriteFilter, setFavoriteFilter] = useState<FavoriteFilter>('all');
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+  const [favoriteIds] = useState<string[]>(() => {
     const savedFavorites = window.localStorage.getItem('favoriteHotels');
     return savedFavorites ? (JSON.parse(savedFavorites) as string[]) : [];
   });
@@ -140,12 +140,6 @@ export function HomePage() {
     setFavoriteFilter('all');
   }
 
-  function toggleFavorite(hotelId: string) {
-    setFavoriteIds((current) =>
-      current.includes(hotelId) ? current.filter((id) => id !== hotelId) : [...current, hotelId],
-    );
-  }
-
   return (
     <main>
       <header className="home-header">
@@ -185,6 +179,7 @@ export function HomePage() {
       <section className="search-shell" aria-label="Поиск и фильтры отелей">
         <div className="search-bar search-bar--filters">
           <label className="search-field">
+            <strong className="ai-search-badge">AI поиск</strong>
             <span>Город или отель</span>
             <input
               type="search"
@@ -192,6 +187,7 @@ export function HomePage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
+            <small>Можно написать город, отель или идею поездки.</small>
           </label>
           <label className="filter-field">
             <span>Регион</span>
@@ -263,8 +259,6 @@ export function HomePage() {
             eyebrow="Фильтр"
             title={foundHotels.length > 0 ? `Найдено: ${foundHotels.length}` : 'Ничего не найдено'}
             hotels={foundHotels}
-            favoriteIds={favoriteIds}
-            onFavoriteToggle={toggleFavorite}
           />
         </>
       ) : (

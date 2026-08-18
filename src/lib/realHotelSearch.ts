@@ -370,8 +370,8 @@ export async function loadRealHotel(query: string): Promise<Hotel | null> {
       return createHotelFromPhotos(query, commonsPhotos);
     }
 
-    return null;
+    return searchedHotel;
   } catch {
-    return null;
+    return searchedHotel;
   }
 }
