@@ -285,7 +285,7 @@ export function HomePage() {
         <div className="section__title section__title--row">
           <div>
             <p className="eyebrow">Авиабилеты</p>
-            <h2>Билеты к этим отелям</h2>
+            <h2>Авиабилеты</h2>
           </div>
           <Link className="button button--light" href="/booking">
             Забронировать поездку
@@ -323,7 +323,7 @@ export function HomePage() {
       <section className="section section--compact">
         <div className="section__title">
           <p className="eyebrow">Поезда</p>
-          <h2>ЖД билеты к этим отелям</h2>
+          <h2>ЖД билеты</h2>
         </div>
         <div className="travel-grid">
           {trains.map((train) => (

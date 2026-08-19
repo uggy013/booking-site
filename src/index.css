@@ -238,10 +238,17 @@ button:hover {
 }
 
 .search-bar--filters {
-  grid-template-columns: minmax(220px, 1.3fr) repeat(6, minmax(120px, 1fr)) 130px;
+  grid-template-columns: minmax(220px, 1.3fr) repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
   padding: 12px;
   border-radius: 14px;
+}
+
+.search-bar--filters button {
+  width: 100%;
+  min-width: 0;
+  padding-inline: 14px;
+  white-space: nowrap;
 }
 
 .search-field,

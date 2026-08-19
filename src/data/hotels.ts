@@ -23,10 +23,92 @@ export type Hotel = {
   image: string;
 };
 
-const cafe =
-  'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80';
-const room =
-  'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=700&q=80';
+const gallerySets = [
+  {
+    cafe: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1598928636135-d146006ff4be?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1578681041175-9717c16b0d66?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1508424757105-b6d5ad9329d0?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1559329007-40df8a9345d8?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1560448075-bb485b067938?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1533777324565-a040eb52fac1?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1594563703937-fdc640497dcd?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1576675784432-994941412b3d?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1561501878-aabd62634533?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=700&q=80',
+  },
+  {
+    cafe: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=700&q=80',
+    room: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=700&q=80',
+  },
+];
+
+function getGalleryPhotos(index: number, yard: string): HotelPhotos {
+  return { yard, ...gallerySets[index] };
+}
 const ritzPhoto =
   'https://www.travoh.com/wp-content/uploads/2022/03/012-The-Ritz-Carlton-Almaty-Hotel-Almaty-Kazakhstan-Exterior-Night.jpg';
 const rixosPhoto =
@@ -81,7 +163,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны, лаунж и завтраки в отеле',
       rooms: 'Номера Deluxe, Club и люксы',
     },
-    photos: { yard: ritzPhoto, cafe, room },
+    photos: getGalleryPhotos(0, ritzPhoto),
     image: ritzPhoto,
   },
   {
@@ -97,7 +179,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны, бар и завтраки',
       rooms: 'Стандартные номера, премиум и люксы',
     },
-    photos: { yard: rixosPhoto, cafe, room },
+    photos: getGalleryPhotos(1, rixosPhoto),
     image: rixosPhoto,
   },
   {
@@ -113,7 +195,7 @@ export const hotels: Hotel[] = [
       cafe: 'Atrium Lounge, ресторан и завтраки',
       rooms: 'Classic, Premium и Club InterContinental',
     },
-    photos: { yard: intercontinentalPhoto, cafe, room },
+    photos: getGalleryPhotos(2, intercontinentalPhoto),
     image: intercontinentalPhoto,
   },
   {
@@ -129,7 +211,7 @@ export const hotels: Hotel[] = [
       cafe: 'Ресторан, бар и завтраки',
       rooms: 'Стандартные номера и люксы',
     },
-    photos: { yard: novotelPhoto, cafe, room },
+    photos: getGalleryPhotos(3, novotelPhoto),
     image: novotelPhoto,
   },
   {
@@ -145,7 +227,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны, кофейня и завтраки',
       rooms: 'Стандартные номера, superior и люксы',
     },
-    photos: { yard: kazakhstanPhoto, cafe, room },
+    photos: getGalleryPhotos(4, kazakhstanPhoto),
     image: kazakhstanPhoto,
   },
   {
@@ -161,7 +243,7 @@ export const hotels: Hotel[] = [
       cafe: 'Ресторан и круглосуточный бар',
       rooms: 'Standard, Premium и люксы',
     },
-    photos: { yard: holidayInnPhoto, cafe, room },
+    photos: getGalleryPhotos(5, holidayInnPhoto),
     image: holidayInnPhoto,
   },
   {
@@ -177,7 +259,7 @@ export const hotels: Hotel[] = [
       cafe: 'Небольшое кафе, завтраки и напитки для гостей',
       rooms: 'Стандартные номера, семейные комнаты и улучшенные номера',
     },
-    photos: { yard: amanPhoto, cafe, room },
+    photos: getGalleryPhotos(6, amanPhoto),
     image: amanPhoto,
   },
   {
@@ -193,7 +275,7 @@ export const hotels: Hotel[] = [
       cafe: 'La Riviere, St. Regis Bar и завтраки',
       rooms: 'Deluxe, Astor Suite и St. Regis Suite',
     },
-    photos: { yard: stRegisAstanaPhoto, cafe, room },
+    photos: getGalleryPhotos(7, stRegisAstanaPhoto),
     image: stRegisAstanaPhoto,
   },
   {
@@ -209,7 +291,7 @@ export const hotels: Hotel[] = [
       cafe: 'Park Kitchen, Axis Lounge и бар Cloud 9',
       rooms: 'Guest Rooms, Executive Rooms и люксы',
     },
-    photos: { yard: hiltonAstanaPhoto, cafe, room },
+    photos: getGalleryPhotos(8, hiltonAstanaPhoto),
     image: hiltonAstanaPhoto,
   },
   {
@@ -225,7 +307,7 @@ export const hotels: Hotel[] = [
       cafe: 'Ресторан, бар и завтраки',
       rooms: 'Guest Rooms, Suites и семейные номера',
     },
-    photos: { yard: doubleTreeShymkentPhoto, cafe, room },
+    photos: getGalleryPhotos(9, doubleTreeShymkentPhoto),
     image: doubleTreeShymkentPhoto,
   },
   {
@@ -241,7 +323,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны all inclusive и бары',
       rooms: 'Номера с видом на море и семейные номера',
     },
-    photos: { yard: rixosAktauPhoto, cafe, room },
+    photos: getGalleryPhotos(10, rixosAktauPhoto),
     image: rixosAktauPhoto,
   },
   {
@@ -257,7 +339,7 @@ export const hotels: Hotel[] = [
       cafe: 'Завтраки Hampton и бар',
       rooms: 'Standard Rooms и номера для семьи',
     },
-    photos: { yard: hiltonAstanaPhoto, cafe, room },
+    photos: getGalleryPhotos(11, hiltonAstanaPhoto),
     image: hiltonAstanaPhoto,
   },
   {
@@ -273,7 +355,7 @@ export const hotels: Hotel[] = [
       cafe: 'The Palm Court, Champagne Bar и завтраки',
       rooms: 'Deluxe Rooms, Grand Luxe и люксы',
     },
-    photos: { yard: plazaNewYorkPhoto, cafe, room },
+    photos: getGalleryPhotos(12, plazaNewYorkPhoto),
     image: plazaNewYorkPhoto,
   },
   {
@@ -289,7 +371,7 @@ export const hotels: Hotel[] = [
       cafe: 'Thames Foyer, American Bar и рестораны',
       rooms: 'Luxury Rooms, River View и Signature Suites',
     },
-    photos: { yard: savoyLondonPhoto, cafe, room },
+    photos: getGalleryPhotos(13, savoyLondonPhoto),
     image: savoyLondonPhoto,
   },
   {
@@ -305,7 +387,7 @@ export const hotels: Hotel[] = [
       cafe: 'Bar Hemingway, L Espadon и завтраки',
       rooms: 'Superior Rooms, Grand Deluxe и Prestige Suites',
     },
-    photos: { yard: ritzParisPhoto, cafe, room },
+    photos: getGalleryPhotos(14, ritzParisPhoto),
     image: ritzParisPhoto,
   },
   {
@@ -321,7 +403,7 @@ export const hotels: Hotel[] = [
       cafe: 'Фирменные рестораны Jumeirah и лаунжи',
       rooms: 'Duplex Suites, Sky Suites и Royal Suite',
     },
-    photos: { yard: burjAlArabPhoto, cafe, room },
+    photos: getGalleryPhotos(15, burjAlArabPhoto),
     image: burjAlArabPhoto,
   },
   {
@@ -337,7 +419,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны высокой кухни, лаунж и завтраки',
       rooms: 'Mandarin Rooms, Premier Rooms и Suites',
     },
-    photos: { yard: mandarinTokyoPhoto, cafe, room },
+    photos: getGalleryPhotos(16, mandarinTokyoPhoto),
     image: mandarinTokyoPhoto,
   },
   {
@@ -353,7 +435,7 @@ export const hotels: Hotel[] = [
       cafe: 'Рестораны, фуд-холлы и бары SkyPark',
       rooms: 'Deluxe Rooms, Sands Premier и Suites',
     },
-    photos: { yard: marinaBaySandsPhoto, cafe, room },
+    photos: getGalleryPhotos(17, marinaBaySandsPhoto),
     image: marinaBaySandsPhoto,
   },
   {
@@ -369,7 +451,7 @@ export const hotels: Hotel[] = [
       cafe: 'AVLU Restaurant, лаунж и завтраки',
       rooms: 'Superior Rooms, Premier Rooms и Suites',
     },
-    photos: { yard: fourSeasonsIstanbulPhoto, cafe, room },
+    photos: getGalleryPhotos(18, fourSeasonsIstanbulPhoto),
     image: fourSeasonsIstanbulPhoto,
   },
   {
@@ -385,7 +467,7 @@ export const hotels: Hotel[] = [
       cafe: 'The Dining Room и бары у воды',
       rooms: 'Opera View Rooms, Harbour View и люксы',
     },
-    photos: { yard: parkHyattSydneyPhoto, cafe, room },
+    photos: getGalleryPhotos(19, parkHyattSydneyPhoto),
     image: parkHyattSydneyPhoto,
   },
   {
